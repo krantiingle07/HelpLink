@@ -49,7 +49,7 @@ export default function DashboardPage() {
     refetch();
   };
 
-  const RequestList = ({ items }: { items: typeof requests }) => {
+  const renderRequestList = (items: typeof requests) => {
     if (items.length === 0) {
       return (
         <div className="text-center py-8 text-muted-foreground">
@@ -226,13 +226,13 @@ export default function DashboardPage() {
                 </TabsList>
 
                 <TabsContent value="open">
-                  <RequestList items={openRequests} />
+                  {renderRequestList(openRequests)}
                 </TabsContent>
                 <TabsContent value="in_progress">
-                  <RequestList items={inProgressRequests} />
+                  {renderRequestList(inProgressRequests)}
                 </TabsContent>
                 <TabsContent value="resolved">
-                  <RequestList items={resolvedRequests} />
+                  {renderRequestList(resolvedRequests)}
                 </TabsContent>
               </Tabs>
             )}

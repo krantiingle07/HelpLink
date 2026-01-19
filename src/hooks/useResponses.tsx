@@ -33,13 +33,7 @@ export function useRequestResponses(requestId: string) {
     
     const { data, error } = await supabase
       .from('help_responses')
-      .select(`
-        *,
-        profiles!help_responses_helper_id_fkey (
-          full_name,
-          avatar_url
-        )
-      `)
+      .select('*')
       .eq('request_id', requestId)
       .order('created_at', { ascending: true });
 

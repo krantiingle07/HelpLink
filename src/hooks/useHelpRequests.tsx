@@ -55,13 +55,7 @@ export function useHelpRequests(filters?: {
     
     let query = supabase
       .from('help_requests')
-      .select(`
-        *,
-        profiles!help_requests_user_id_fkey (
-          full_name,
-          avatar_url
-        )
-      `)
+      .select('*')
       .order('created_at', { ascending: false });
 
     if (filters?.category) {

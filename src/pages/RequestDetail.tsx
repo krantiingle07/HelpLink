@@ -49,13 +49,7 @@ export default function RequestDetailPage() {
     setLoading(true);
     const { data, error } = await supabase
       .from('help_requests')
-      .select(`
-        *,
-        profiles!help_requests_user_id_fkey (
-          full_name,
-          avatar_url
-        )
-      `)
+      .select('*')
       .eq('id', id)
       .maybeSingle();
 

@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { CategoryCard } from '@/components/requests/CategoryCard';
+import { ImageUpload } from '@/components/requests/ImageUpload';
 import { useAuth } from '@/hooks/useAuth';
 import { useCreateRequest } from '@/hooks/useHelpRequests';
 import { HELP_CATEGORIES, HelpCategory, URGENCY_CONFIG } from '@/lib/constants';
@@ -30,6 +31,7 @@ export default function CreateRequestPage() {
   const [city, setCity] = useState('');
   const [location, setLocation] = useState('');
   const [contactPhone, setContactPhone] = useState('');
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   if (authLoading) {
     return (
@@ -68,6 +70,7 @@ export default function CreateRequestPage() {
       city: city || undefined,
       location: location || undefined,
       contact_phone: contactPhone || undefined,
+      image_url: imageUrl || undefined,
     });
 
     if (!error && data) {
@@ -210,6 +213,19 @@ export default function CreateRequestPage() {
                 </RadioGroup>
               </div>
 
+              <div className="space-y-2">
+                <Label>Add an Image (Optional)</Label>
+                <p className="text-sm text-muted-foreground mb-2">
+                  Upload a photo to help illustrate your request
+                </p>
+                <ImageUpload
+                  userId={user.id}
+                  imageUrl={imageUrl}
+                  onImageChange={setImageUrl}
+                  disabled={loading}
+                />
+              </div>
+
               <div className="flex justify-between pt-4">
                 <Button variant="outline" onClick={() => setStep(1)} className="gap-2">
                   <ArrowLeft className="h-4 w-4" />
@@ -279,11 +295,17 @@ export default function CreateRequestPage() {
                   <CheckCircle className="h-4 w-4 text-success" />
                   Request Preview
                 </h3>
-                <div className="space-y-1 text-sm">
+                <div className="space-y-2 text-sm">
                   <p><strong>Category:</strong> {HELP_CATEGORIES.find(c => c.id === category)?.label}</p>
                   <p><strong>Title:</strong> {title}</p>
                   <p><strong>Urgency:</strong> {URGENCY_CONFIG[urgency].label}</p>
                   {city && <p><strong>City:</strong> {city}</p>}
+                  {imageUrl && (
+                    <div className="mt-2">
+                      <strong>Image:</strong>
+                      <img src={imageUrl} alt="Request preview" className="mt-1 rounded-md h-20 object-cover" />
+                    </div>
+                  )}
                 </div>
               </div>
 

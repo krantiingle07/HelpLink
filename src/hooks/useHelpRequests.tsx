@@ -38,6 +38,7 @@ interface CreateRequestInput {
   location?: string;
   contact_phone?: string;
   additional_info?: Record<string, unknown>;
+  image_url?: string;
 }
 
 export function useHelpRequests(filters?: {
@@ -163,6 +164,7 @@ export function useCreateRequest() {
       location: input.location || null,
       contact_phone: input.contact_phone || null,
       additional_info: input.additional_info || {},
+      image_url: input.image_url || null,
     };
     
     const { data, error } = await supabase

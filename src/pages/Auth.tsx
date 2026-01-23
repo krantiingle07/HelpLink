@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import { HandHeart, Mail, Lock, User, Loader2, Sparkles } from 'lucide-react';
 import { z } from 'zod';
 
@@ -53,6 +54,19 @@ export default function AuthPage() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const checkAdminAndRedirect = async (userId: string) => {
+    const { data } = await supabase.rpc('has_role', {
+      _user_id: userId,
+      _role: 'admin'
+    });
+    
+    if (data === true) {
+      navigate('/admin');
+    } else {
+      navigate('/dashboard');
+    }
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -60,9 +74,9 @@ export default function AuthPage() {
     
     setLoading(true);
     const { error } = await signIn(email, password);
-    setLoading(false);
     
     if (error) {
+      setLoading(false);
       toast({
         title: 'Login Failed',
         description: error.message === 'Invalid login credentials' 
@@ -75,7 +89,14 @@ export default function AuthPage() {
         title: 'Welcome back!',
         description: 'You have been logged in successfully.',
       });
-      navigate('/dashboard');
+      // Check if user is admin and redirect accordingly
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await checkAdminAndRedirect(user.id);
+      } else {
+        navigate('/dashboard');
+      }
+      setLoading(false);
     }
   };
 

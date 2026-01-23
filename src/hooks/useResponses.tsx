@@ -39,8 +39,24 @@ export function useRequestResponses(requestId: string) {
 
     if (error) {
       console.error('Error fetching responses:', error);
+      setResponses([]);
     } else {
-      setResponses((data as unknown as HelpResponse[]) || []);
+      // Fetch profile data from the public view for each helper
+      const responsesWithProfiles = await Promise.all(
+        (data || []).map(async (response: any) => {
+          const { data: profile } = await supabase
+            .from('profiles_public')
+            .select('full_name, avatar_url')
+            .eq('user_id', response.helper_id)
+            .maybeSingle();
+          
+          return {
+            ...response,
+            profiles: profile || null,
+          };
+        })
+      );
+      setResponses(responsesWithProfiles as HelpResponse[]);
     }
     
     setLoading(false);

@@ -101,6 +101,13 @@ export type Database = {
             referencedRelation: "help_requests"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "help_responses_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "help_requests_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       messages: {
@@ -137,6 +144,13 @@ export type Database = {
             columns: ["request_id"]
             isOneToOne: false
             referencedRelation: "help_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "help_requests_public"
             referencedColumns: ["id"]
           },
         ]
@@ -203,7 +217,93 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      help_requests_public: {
+        Row: {
+          additional_info: Json | null
+          category: Database["public"]["Enums"]["help_category"] | null
+          city: string | null
+          created_at: string | null
+          description: string | null
+          id: string | null
+          image_url: string | null
+          location: string | null
+          status: Database["public"]["Enums"]["request_status"] | null
+          title: string | null
+          updated_at: string | null
+          urgency: Database["public"]["Enums"]["urgency_level"] | null
+          user_id: string | null
+        }
+        Insert: {
+          additional_info?: Json | null
+          category?: Database["public"]["Enums"]["help_category"] | null
+          city?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          image_url?: string | null
+          location?: string | null
+          status?: Database["public"]["Enums"]["request_status"] | null
+          title?: string | null
+          updated_at?: string | null
+          urgency?: Database["public"]["Enums"]["urgency_level"] | null
+          user_id?: string | null
+        }
+        Update: {
+          additional_info?: Json | null
+          category?: Database["public"]["Enums"]["help_category"] | null
+          city?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          image_url?: string | null
+          location?: string | null
+          status?: Database["public"]["Enums"]["request_status"] | null
+          title?: string | null
+          updated_at?: string | null
+          urgency?: Database["public"]["Enums"]["urgency_level"] | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles_public: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          city: string | null
+          created_at: string | null
+          full_name: string | null
+          id: string | null
+          is_helper: boolean | null
+          is_seeker: boolean | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          city?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          is_helper?: boolean | null
+          is_seeker?: boolean | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          city?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          is_helper?: boolean | null
+          is_seeker?: boolean | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {

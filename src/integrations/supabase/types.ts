@@ -24,12 +24,15 @@ export type Database = {
           description: string
           id: string
           image_url: string | null
+          is_verified: boolean | null
           location: string | null
           status: Database["public"]["Enums"]["request_status"]
           title: string
           updated_at: string
           urgency: Database["public"]["Enums"]["urgency_level"]
           user_id: string
+          verified_at: string | null
+          verified_by: string | null
         }
         Insert: {
           additional_info?: Json | null
@@ -40,12 +43,15 @@ export type Database = {
           description: string
           id?: string
           image_url?: string | null
+          is_verified?: boolean | null
           location?: string | null
           status?: Database["public"]["Enums"]["request_status"]
           title: string
           updated_at?: string
           urgency?: Database["public"]["Enums"]["urgency_level"]
           user_id: string
+          verified_at?: string | null
+          verified_by?: string | null
         }
         Update: {
           additional_info?: Json | null
@@ -56,12 +62,15 @@ export type Database = {
           description?: string
           id?: string
           image_url?: string | null
+          is_verified?: boolean | null
           location?: string | null
           status?: Database["public"]["Enums"]["request_status"]
           title?: string
           updated_at?: string
           urgency?: Database["public"]["Enums"]["urgency_level"]
           user_id?: string
+          verified_at?: string | null
+          verified_by?: string | null
         }
         Relationships: []
       }
@@ -94,6 +103,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "help_responses_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "admin_requests_view"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "help_responses_request_id_fkey"
             columns: ["request_id"]
@@ -139,6 +155,13 @@ export type Database = {
           sender_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "messages_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "admin_requests_view"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "messages_request_id_fkey"
             columns: ["request_id"]
@@ -217,6 +240,75 @@ export type Database = {
       }
     }
     Views: {
+      admin_requests_view: {
+        Row: {
+          additional_info: Json | null
+          category: Database["public"]["Enums"]["help_category"] | null
+          city: string | null
+          contact_phone: string | null
+          created_at: string | null
+          description: string | null
+          id: string | null
+          image_url: string | null
+          is_verified: boolean | null
+          location: string | null
+          requester_avatar: string | null
+          requester_name: string | null
+          status: Database["public"]["Enums"]["request_status"] | null
+          title: string | null
+          updated_at: string | null
+          urgency: Database["public"]["Enums"]["urgency_level"] | null
+          user_id: string | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Relationships: []
+      }
+      admin_users_view: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          city: string | null
+          created_at: string | null
+          full_name: string | null
+          id: string | null
+          is_helper: boolean | null
+          is_seeker: boolean | null
+          phone: string | null
+          roles: Database["public"]["Enums"]["app_role"][] | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          city?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          is_helper?: boolean | null
+          is_seeker?: boolean | null
+          phone?: string | null
+          roles?: never
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          city?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          is_helper?: boolean | null
+          is_seeker?: boolean | null
+          phone?: string | null
+          roles?: never
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       help_requests_public: {
         Row: {
           additional_info: Json | null

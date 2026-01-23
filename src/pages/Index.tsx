@@ -32,7 +32,7 @@ const Index = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative min-h-[95vh] flex items-center overflow-hidden">
+      <section className="relative min-h-[70vh] flex items-center overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0 bg-gradient-radial" />
         <div className="absolute inset-0 bg-gradient-mesh" />
@@ -43,8 +43,8 @@ const Index = () => {
         <div className="absolute bottom-20 right-[10%] w-96 h-96 rounded-full bg-secondary/10 blur-3xl float-delayed" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-accent/5 blur-3xl" />
         
-        <div className="container relative z-10 py-20">
-          <div className="max-w-5xl mx-auto">
+        <div className="container relative z-10 py-12">
+          <div className="max-w-4xl mx-auto">
             {/* Badge */}
             <div className="flex justify-center mb-8 animate-fade-in">
               <div className="badge-modern">
@@ -55,36 +55,36 @@ const Index = () => {
             </div>
             
             {/* Heading */}
-            <h1 className="text-center text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-8 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+            <h1 className="text-center text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-6 animate-fade-in" style={{ animationDelay: '0.1s' }}>
               Help Someone Today
               <br />
               <span className="text-gradient-animated">Change a Life Forever</span>
             </h1>
             
             {/* Description */}
-            <p className="text-center text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <p className="text-center text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-8 animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Connect with your community. Request help when you need it, 
               or become a helper and make a real difference.
             </p>
             
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10 animate-fade-in" style={{ animationDelay: '0.3s' }}>
               <Button 
-                size="lg" 
-                className="btn-primary h-16 px-10 text-lg gap-3 w-full sm:w-auto"
+                size="default" 
+                className="btn-primary h-11 px-6 text-sm gap-2 w-full sm:w-auto"
                 onClick={() => navigate(user ? '/create' : '/auth?mode=signup')}
               >
-                <HandHeart className="w-6 h-6" />
+                <HandHeart className="w-4 h-4" />
                 Request Help
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className="w-4 h-4" />
               </Button>
               <Button 
-                size="lg"
+                size="default"
                 variant="outline" 
-                className="btn-secondary h-16 px-10 text-lg gap-3 w-full sm:w-auto"
+                className="btn-secondary h-11 px-6 text-sm gap-2 w-full sm:w-auto"
                 onClick={() => navigate('/browse')}
               >
-                <Users className="w-6 h-6" />
+                <Users className="w-4 h-4" />
                 Browse & Help Others
               </Button>
             </div>
@@ -111,9 +111,9 @@ const Index = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 relative">
+      <section className="py-12 relative">
         <div className="container">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { value: '10+', label: 'Categories', icon: Heart },
               { value: '24/7', label: 'Support', icon: Clock },
@@ -122,14 +122,14 @@ const Index = () => {
             ].map((stat, i) => (
               <div 
                 key={i} 
-                className="feature-card text-center animate-fade-in"
+                className="feature-card text-center animate-fade-in p-4"
                 style={{ animationDelay: `${i * 0.1}s` }}
               >
-                <div className="icon-box inline-flex items-center justify-center w-14 h-14 mb-4">
-                  <stat.icon className="w-7 h-7 text-primary" />
+                <div className="icon-box inline-flex items-center justify-center w-10 h-10 mb-3">
+                  <stat.icon className="w-5 h-5 text-primary" />
                 </div>
-                <div className="stat-value mb-2">{stat.value}</div>
-                <div className="text-muted-foreground font-medium">{stat.label}</div>
+                <div className="text-xl font-bold text-primary mb-1">{stat.value}</div>
+                <div className="text-sm text-muted-foreground">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -138,21 +138,21 @@ const Index = () => {
 
       {/* Urgent Requests */}
       {urgentRequests.length > 0 && (
-        <section className="py-20 relative">
+        <section className="py-12 relative">
           <div className="absolute inset-0 bg-gradient-mesh opacity-50" />
           
           <div className="container relative">
-            <div className="flex items-end justify-between mb-12">
+            <div className="flex items-end justify-between mb-8">
               <div>
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="relative flex h-3 w-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-destructive opacity-75" />
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-destructive" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-destructive" />
                   </span>
-                  <span className="badge-modern !bg-destructive/10 !text-destructive !border-destructive/20">Urgent</span>
+                  <span className="badge-modern !bg-destructive/10 !text-destructive !border-destructive/20 text-xs">Urgent</span>
                 </div>
-                <h2 className="text-3xl md:text-4xl font-bold">Needs Immediate Help</h2>
-                <p className="text-muted-foreground mt-2">These requests require urgent attention</p>
+                <h2 className="text-xl md:text-2xl font-bold">Needs Immediate Help</h2>
+                <p className="text-sm text-muted-foreground mt-1">These requests require urgent attention</p>
               </div>
               <Button variant="outline" asChild className="hidden md:flex gap-2 btn-secondary">
                 <Link to="/browse?urgency=critical">
@@ -174,18 +174,18 @@ const Index = () => {
       )}
 
       {/* Categories Section */}
-      <section className="py-24 relative overflow-hidden">
+      <section className="py-14 relative overflow-hidden">
         <div className="absolute inset-0 bg-muted/30" />
         <div className="absolute inset-0 bg-dots" />
         
         <div className="container relative">
-          <div className="text-center mb-16">
-            <div className="badge-modern mx-auto mb-6">
-              <Heart className="w-4 h-4" />
+          <div className="text-center mb-10">
+            <div className="badge-modern mx-auto mb-4 text-xs">
+              <Heart className="w-3 h-3" />
               <span>Categories</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">How Can We Help?</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-bold mb-2">How Can We Help?</h2>
+            <p className="text-sm text-muted-foreground max-w-xl mx-auto">
               Select a category to find help or offer your support
             </p>
           </div>
@@ -204,16 +204,16 @@ const Index = () => {
       </section>
 
       {/* Recent Requests */}
-      <section className="py-24">
+      <section className="py-14">
         <div className="container">
-          <div className="flex items-end justify-between mb-12">
+          <div className="flex items-end justify-between mb-8">
             <div>
-              <div className="badge-modern mb-4">
-                <Clock className="w-4 h-4" />
+              <div className="badge-modern mb-3 text-xs">
+                <Clock className="w-3 h-3" />
                 <span>Recent</span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold">Latest Requests</h2>
-              <p className="text-muted-foreground mt-2">People in your community need help</p>
+              <h2 className="text-xl md:text-2xl font-bold">Latest Requests</h2>
+              <p className="text-sm text-muted-foreground mt-1">People in your community need help</p>
             </div>
             <Button variant="outline" asChild className="gap-2 btn-secondary hidden md:flex">
               <Link to="/browse">
@@ -238,18 +238,18 @@ const Index = () => {
               ))}
             </div>
           ) : (
-            <div className="feature-card text-center py-20">
-              <div className="icon-box inline-flex items-center justify-center w-20 h-20 mb-6">
-                <HandHeart className="w-10 h-10 text-primary" />
+            <div className="feature-card text-center py-12">
+              <div className="icon-box inline-flex items-center justify-center w-14 h-14 mb-4">
+                <HandHeart className="w-7 h-7 text-primary" />
               </div>
-              <h3 className="text-2xl font-bold mb-2">No requests yet</h3>
-              <p className="text-muted-foreground mb-8">Be the first to create a request or help someone!</p>
+              <h3 className="text-lg font-bold mb-2">No requests yet</h3>
+              <p className="text-sm text-muted-foreground mb-6">Be the first to create a request or help someone!</p>
               <Button 
-                className="btn-primary h-14 px-8 text-lg gap-2"
+                className="btn-primary h-10 px-6 text-sm gap-2"
                 onClick={() => navigate(user ? '/create' : '/auth')}
               >
                 Get Started
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className="w-4 h-4" />
               </Button>
             </div>
           )}
@@ -266,20 +266,20 @@ const Index = () => {
       </section>
 
       {/* How It Works */}
-      <section className="py-24 relative">
+      <section className="py-14 relative">
         <div className="absolute inset-0 bg-gradient-mesh" />
         
         <div className="container relative">
-          <div className="text-center mb-16">
-            <div className="badge-modern mx-auto mb-6">
-              <Play className="w-4 h-4" />
+          <div className="text-center mb-10">
+            <div className="badge-modern mx-auto mb-4 text-xs">
+              <Play className="w-3 h-3" />
               <span>How It Works</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">Three Simple Steps</h2>
-            <p className="text-xl text-muted-foreground">Get started in under a minute</p>
+            <h2 className="text-2xl md:text-3xl font-bold mb-2">Three Simple Steps</h2>
+            <p className="text-sm text-muted-foreground">Get started in under a minute</p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-5 max-w-4xl mx-auto">
             {[
               { 
                 step: '01', 
@@ -302,17 +302,17 @@ const Index = () => {
             ].map((item, i) => (
               <div key={i} className="relative animate-fade-in" style={{ animationDelay: `${i * 0.15}s` }}>
                 {i < 2 && (
-                  <div className="hidden md:block absolute top-20 left-[60%] w-[80%] border-t-2 border-dashed border-border" />
+                  <div className="hidden md:block absolute top-14 left-[60%] w-[80%] border-t-2 border-dashed border-border" />
                 )}
-                <div className="feature-card text-center relative">
-                  <div className="absolute top-4 right-6 text-6xl font-black text-muted/50">
+                <div className="feature-card text-center relative p-5">
+                  <div className="absolute top-3 right-4 text-4xl font-black text-muted/50">
                     {item.step}
                   </div>
-                  <div className="icon-box inline-flex items-center justify-center w-16 h-16 mb-6">
-                    <item.icon className="w-8 h-8 text-primary" />
+                  <div className="icon-box inline-flex items-center justify-center w-12 h-12 mb-4">
+                    <item.icon className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-3">{item.title}</h3>
-                  <p className="text-muted-foreground">{item.desc}</p>
+                  <h3 className="text-lg font-bold mb-2">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -321,9 +321,9 @@ const Index = () => {
       </section>
 
       {/* Trust Section */}
-      <section className="py-24">
+      <section className="py-12">
         <div className="container">
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-4">
             {[
               { 
                 icon: Shield, 
@@ -343,15 +343,15 @@ const Index = () => {
             ].map((item, i) => (
               <div 
                 key={i} 
-                className="feature-card flex items-start gap-5 animate-fade-in"
+                className="feature-card flex items-start gap-4 animate-fade-in p-4"
                 style={{ animationDelay: `${i * 0.1}s` }}
               >
-                <div className="icon-box shrink-0">
-                  <item.icon className="w-6 h-6 text-primary" />
+                <div className="icon-box shrink-0 w-10 h-10">
+                  <item.icon className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                  <p className="text-muted-foreground">{item.desc}</p>
+                  <h3 className="text-base font-bold mb-1">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -360,33 +360,33 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24">
+      <section className="py-14">
         <div className="container">
-          <div className="relative rounded-[2rem] overflow-hidden">
+          <div className="relative rounded-2xl overflow-hidden">
             {/* Gradient background */}
             <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-secondary" />
             <div className="absolute inset-0 bg-grid opacity-10" />
             
             {/* Decorative blurs */}
-            <div className="absolute -top-20 -left-20 w-80 h-80 bg-white/20 rounded-full blur-3xl" />
-            <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-white/10 rounded-full blur-3xl" />
+            <div className="absolute -top-16 -left-16 w-48 h-48 bg-white/20 rounded-full blur-3xl" />
+            <div className="absolute -bottom-16 -right-16 w-48 h-48 bg-white/10 rounded-full blur-3xl" />
             
             {/* Content */}
-            <div className="relative z-10 px-8 py-20 md:px-20 md:py-28 text-center">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6">
+            <div className="relative z-10 px-6 py-12 md:px-12 md:py-16 text-center">
+              <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-4">
                 Ready to Make a Difference?
               </h2>
-              <p className="text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-10">
+              <p className="text-sm md:text-base text-primary-foreground/80 max-w-xl mx-auto mb-6">
                 Join our community today and start helping or receiving help. It's completely free.
               </p>
               <Button 
-                size="lg"
+                size="default"
                 variant="secondary"
-                className="h-16 px-12 text-lg font-bold gap-3 hover:scale-105 transition-transform"
+                className="h-10 px-6 text-sm font-semibold gap-2 hover:scale-105 transition-transform"
                 onClick={() => navigate(user ? '/dashboard' : '/auth?mode=signup')}
               >
                 {user ? 'Go to Dashboard' : 'Join Now — It\'s Free'}
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className="w-4 h-4" />
               </Button>
             </div>
           </div>

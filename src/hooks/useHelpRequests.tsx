@@ -54,8 +54,9 @@ export function useHelpRequests(filters?: {
   const fetchRequests = async () => {
     setLoading(true);
     
+    // Use public view to hide sensitive data (contact_phone) for browsing
     let query = supabase
-      .from('help_requests')
+      .from('help_requests_public')
       .select('*')
       .order('created_at', { ascending: false });
 
@@ -82,7 +83,12 @@ export function useHelpRequests(filters?: {
         variant: 'destructive',
       });
     } else {
-      setRequests((data as unknown as HelpRequest[]) || []);
+      // Map view data to HelpRequest type (contact_phone will be null from view)
+      const requests = (data || []).map((item: any) => ({
+        ...item,
+        contact_phone: null, // Not exposed in public view
+      })) as HelpRequest[];
+      setRequests(requests);
     }
     
     setLoading(false);

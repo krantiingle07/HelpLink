@@ -104,10 +104,15 @@ export function useHelpRequests(filters?: {
 export function useMyRequests() {
   const [requests, setRequests] = useState<HelpRequest[]>([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const { toast } = useToast();
 
   const fetchMyRequests = async () => {
+    // Wait for auth to be ready
+    if (authLoading) {
+      return;
+    }
+    
     if (!user) {
       setRequests([]);
       setLoading(false);
@@ -116,31 +121,40 @@ export function useMyRequests() {
 
     setLoading(true);
     
-    const { data, error } = await supabase
-      .from('help_requests')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false });
+    try {
+      const { data, error } = await supabase
+        .from('help_requests')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
 
-    if (error) {
-      console.error('Error fetching my requests:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to fetch your requests',
-        variant: 'destructive',
-      });
-    } else {
-      setRequests((data as unknown as HelpRequest[]) || []);
+      if (error) {
+        console.error('Error fetching my requests:', error);
+        toast({
+          title: 'Error',
+          description: 'Failed to fetch your requests',
+          variant: 'destructive',
+        });
+        setRequests([]);
+      } else {
+        setRequests((data as unknown as HelpRequest[]) || []);
+      }
+    } catch (err) {
+      console.error('Exception fetching requests:', err);
+      setRequests([]);
     }
     
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchMyRequests();
-  }, [user]);
+    // Only fetch when auth is ready
+    if (!authLoading) {
+      fetchMyRequests();
+    }
+  }, [user, authLoading]);
 
-  return { requests, loading, refetch: fetchMyRequests };
+  return { requests, loading: loading || authLoading, refetch: fetchMyRequests };
 }
 
 export function useCreateRequest() {

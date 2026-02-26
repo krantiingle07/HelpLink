@@ -74,7 +74,7 @@ export function useCreateResponse() {
   const { user } = useAuth();
   const { toast } = useToast();
 
-  const createResponse = async (requestId: string, message: string) => {
+  const createResponse = async (requestId: string, message: string, seekerId: string) => {
     if (!user) {
       toast({
         title: 'Error',
@@ -84,36 +84,72 @@ export function useCreateResponse() {
       return { error: new Error('Not authenticated'), data: null };
     }
 
-    setLoading(true);
-    
-    const { data, error } = await supabase
-      .from('help_responses')
-      .insert({
-        request_id: requestId,
-        helper_id: user.id,
-        message,
-      })
-      .select()
-      .single();
-
-    setLoading(false);
-
-    if (error) {
-      console.error('Error creating response:', error);
+    if (!seekerId) {
+      console.error('No seekerId provided to createResponse');
       toast({
         title: 'Error',
-        description: 'Failed to submit your response',
+        description: 'Unable to identify the help seeker',
         variant: 'destructive',
       });
-      return { error, data: null };
+      return { error: new Error('No seekerId'), data: null };
     }
 
-    toast({
-      title: 'Thank you!',
-      description: 'Your offer to help has been sent',
-    });
+    setLoading(true);
+    
+    try {
+      console.log('Creating response:', { requestId, helper_id: user.id, seekerId });
 
-    return { error: null, data };
+      // Create the help response
+      const { data: responseData, error: responseError } = await supabase
+        .from('help_responses')
+        .insert({
+          request_id: requestId,
+          helper_id: user.id,
+          message,
+        })
+        .select()
+        .single();
+
+      if (responseError) {
+        console.error('Error creating help response:', responseError);
+        throw responseError;
+      }
+
+      console.log('Help response created:', responseData);
+
+      // Create a private message from helper to seeker (fire and forget)
+      supabase
+        .from('messages')
+        .insert({
+          sender_id: user.id,
+          receiver_id: seekerId,
+          content: message,
+          request_id: requestId,
+        })
+        .then(() => console.log('Message created successfully'))
+        .catch((err) => console.error('Error creating message:', err));
+
+      setLoading(false);
+
+      toast({
+        title: 'Thank you!',
+        description: 'Your offer to help has been sent. Check Messages to communicate with the seeker.',
+      });
+
+      return { error: null, data: responseData };
+    } catch (err: unknown) {
+      setLoading(false);
+
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      console.error('Error in createResponse:', errorMessage);
+
+      toast({
+        title: 'Error',
+        description: `Failed to submit your response: ${errorMessage}`,
+        variant: 'destructive',
+      });
+      return { error: err as Error, data: null };
+    }
   };
 
   return { createResponse, loading };

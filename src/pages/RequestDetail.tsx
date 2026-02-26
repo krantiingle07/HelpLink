@@ -98,12 +98,18 @@ export default function RequestDetailPage() {
   };
 
   const handleSubmitResponse = async () => {
-    if (!id || !responseMessage.trim()) return;
+    if (!id || !responseMessage.trim() || !request?.user_id) {
+      console.warn('Cannot submit response:', { id, message: responseMessage.trim(), seekerId: request?.user_id });
+      return;
+    }
 
-    const { error } = await createResponse(id, responseMessage);
+    console.log('Submitting response to request:', id, 'for seeker:', request.user_id);
+    const { error } = await createResponse(id, responseMessage, request.user_id);
     if (!error) {
       setResponseMessage('');
       refetchResponses();
+    } else {
+      console.error('Response submission resulted in error:', error);
     }
   };
 
@@ -209,8 +215,8 @@ export default function RequestDetailPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <MessageSquare className="h-5 w-5" />
-                  Responses ({responses.length})
+                  <HandHeart className="h-5 w-5" />
+                  Helpers Interested ({responses.length})
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -220,31 +226,53 @@ export default function RequestDetailPage() {
                   </div>
                 ) : responses.length > 0 ? (
                   <div className="space-y-4">
-                    {responses.map((response) => (
-                      <div key={response.id} className="flex gap-3 p-4 rounded-lg bg-muted/50">
-                        <Avatar className="h-10 w-10">
-                          <AvatarImage src={response.profiles?.avatar_url || ''} />
-                          <AvatarFallback className="text-xs">
-                            {response.profiles?.full_name ? getInitials(response.profiles.full_name) : 'H'}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="font-medium">
-                              {response.profiles?.full_name || 'Helper'}
-                            </span>
-                            <span className="text-xs text-muted-foreground">
-                              {format(new Date(response.created_at), 'MMM d, yyyy h:mm a')}
-                            </span>
-                          </div>
-                          <p className="text-sm text-muted-foreground">{response.message}</p>
+                    {isOwner ? (
+                      <>
+                        <p className="text-sm text-muted-foreground mb-4">
+                          You have {responses.length} helper{responses.length !== 1 ? 's' : ''} interested in helping.
+                          Check your <a href="/messages" className="text-primary hover:underline">Messages</a> to communicate with them.
+                        </p>
+                        <div className="space-y-3">
+                          {responses.map((response) => (
+                            <div key={response.id} className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+                              <Avatar className="h-10 w-10">
+                                <AvatarImage src={response.profiles?.avatar_url || ''} />
+                                <AvatarFallback className="text-xs">
+                                  {response.profiles?.full_name ? getInitials(response.profiles.full_name) : 'H'}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div className="flex-1">
+                                <p className="font-medium">
+                                  {response.profiles?.full_name || 'Helper'}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  Responded {format(new Date(response.created_at), 'MMM d, h:mm a')}
+                                </p>
+                              </div>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => navigate(`/messages?user=${response.helper_id}`)}
+                              >
+                                <MessageSquare className="h-4 w-4 mr-1" />
+                                Message
+                              </Button>
+                            </div>
+                          ))}
                         </div>
-                      </div>
-                    ))}
+                      </>
+                    ) : (
+                      <p className="text-center text-muted-foreground py-8">
+                        {responses.length} helper{responses.length !== 1 ? 's' : ''} want{responses.length === 1 ? 's' : ''} to help. 
+                        Submit your response below to connect with the seeker privately.
+                      </p>
+                    )}
                   </div>
                 ) : (
                   <p className="text-center text-muted-foreground py-8">
-                    No responses yet. Be the first to help!
+                    {isOwner 
+                      ? 'No helpers yet. Share this request to find volunteers!'
+                      : 'No helpers yet. Be the first to help!'}
                   </p>
                 )}
 
@@ -252,9 +280,12 @@ export default function RequestDetailPage() {
                 {user && !isOwner && request.status === 'open' && (
                   <div className="mt-6 pt-6 border-t">
                     {hasResponded ? (
-                      <p className="text-center text-muted-foreground">
-                        You have already responded to this request
-                      </p>
+                      <div className="text-center text-muted-foreground p-4 bg-muted rounded-lg">
+                        <p className="font-medium mb-1">You've already responded</p>
+                        <p className="text-sm">
+                          Check your <a href="/messages" className="text-primary hover:underline">Messages</a> to communicate with the seeker.
+                        </p>
+                      </div>
                     ) : (
                       <div className="space-y-3">
                         <Textarea

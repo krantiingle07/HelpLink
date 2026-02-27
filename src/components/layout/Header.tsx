@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { useIsAdmin } from '@/hooks/useAdmin';
+import { useConversations } from '@/hooks/useMessages';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { 
   DropdownMenu,
@@ -26,6 +27,8 @@ import { useState } from 'react';
 export function Header() {
   const { user, profile, signOut } = useAuth();
   const { isAdmin } = useIsAdmin();
+  const { conversations } = useConversations();
+  const unreadTotal = conversations.reduce((sum, c) => sum + (c.unread_count || 0), 0);
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -63,8 +66,13 @@ export function Header() {
               <Link to="/create" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Post Request
               </Link>
-              <Link to="/messages" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              <Link to="/messages" className="relative text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Messages
+                {unreadTotal > 0 && (
+                  <span className="absolute -top-1 -right-2 inline-flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-white text-xs">
+                    {unreadTotal}
+                  </span>
+                )}
               </Link>
             </>
           )}
@@ -176,10 +184,15 @@ export function Header() {
                 </Link>
                 <Link 
                   to="/messages" 
-                  className="block py-2 text-sm font-medium hover:text-primary transition-colors"
+                  className="relative block py-2 text-sm font-medium hover:text-primary transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Messages
+                  {unreadTotal > 0 && (
+                    <span className="absolute top-1 right-2 inline-flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-white text-xs">
+                      {unreadTotal}
+                    </span>
+                  )}
                 </Link>
                 <Link 
                   to="/profile" 
